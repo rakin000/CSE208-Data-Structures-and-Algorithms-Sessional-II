@@ -20,73 +20,73 @@ int main(){
     bh.insert(17);
     bh.insert(18);
     bh.delete_max();
-    bh.print();
+    bh.print2();
   
     bh.delete_max();
-    bh.print();
+    bh.print2();
 
     bh.delete_max();
-    bh.print();
+    bh.print2();
 
     bh.delete_max();
-    bh.print();
+    bh.print2();
 
     bh.delete_max();
-    bh.print();
+    bh.print2();
 
     bh.delete_max();
-    bh.print();
+    bh.print2();
 
      bh.delete_max();
-    bh.print();
+    bh.print2();
 
      bh.delete_max();
-    bh.print();
+    bh.print2();
 
      bh.delete_max();
-    bh.print();
+    bh.print2();
 
      bh.delete_max();
-    bh.print();
+    bh.print2();
 
      bh.delete_max();
-    bh.print();
+    bh.print2();
 
      bh.delete_max();
-    bh.print();
+    bh.print2();
 
      bh.delete_max();
-    bh.print();
+    bh.print2();
 
     
 
     bh.insert(323);
-    bh.print();
+    bh.print2();
 
     bh.increase_key(3,50);
-    bh.print();
+    bh.print2();
     bh.increase_key(2,400);
-    bh.print();
+    bh.print2();
     bh.increase_key(1,500);
-    bh.print();
+    bh.print2();
 
     bh.erase(50);
-    bh.print();
+    bh.print2();
 
     bh.erase(2344);
-    bh.print();
+    bh.print2();
 
     bh.erase(400);
-    bh.print();
+    bh.print2();
 
     bh.erase(500);
-    bh.print();
+    bh.print2();
 
     bh.erase(500);
-    bh.print();
+    bh.print2();
 
     bh.erase(323);
-    bh.print();
+    bh.print2();
     bh.erase(343);
-    bh.print();
+    bh.print2();
 }

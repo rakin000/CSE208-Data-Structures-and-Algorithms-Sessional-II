@@ -75,19 +75,34 @@ struct binomial_heap{
     ~binomial_heap(){
         delete head;
     }
+    void clear(){
+        delete head;
+        head = NULL;
+    }
     void print2(){
         int sz = size();
-        cout<<"Heap size: "<<sz<<endl;
+        cout<<"Heap size: "<<sz<<"(";
         string s;
         while( sz ){
             s += char( '0'+(sz&1) );
             sz >>=1;
         }
         std::reverse(s.begin(),s.end());
-        cout<<s<<endl;
-        if( head != NULL ) head->print();
+        cout<<s<<")"<<endl;
+        int i=0;
+        node *h = head;
+        sz = size();
+        while( sz ){
+            if( sz&1 ){
+                cout<<"Binomial Tree: B"<<i<<endl;
+                h->print();
+                h = h->next;
+            }
+            i++;
+            sz >>= 1;
+        }
+        cout<<endl;
     }
-
     void print(){
         int sz = size();
         node *h = head;
