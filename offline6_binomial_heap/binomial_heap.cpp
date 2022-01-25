@@ -22,22 +22,20 @@ struct binomial_heap{
         ~node(){
             delete child;
             delete next;
-            cout<<"deleted "<<value<<endl;
+            // cout<<"deleted "<<value<<endl;
         }
 
-        node* find(int value){
-            if( this->value == value )
+        node* find(int val){
+            if( this->value == val )
                 return this;
-            if( this->value < value) 
-                return NULL;
-
-            node *found_node = child->find(value);
-            if( found_node != NULL )
-                return found_node;
-            found_node = next->find(value);
+            node *found_node = (child != NULL ) ? child->find(val):NULL;
+            if( found_node != NULL )    return found_node;
+            found_node = (next != NULL) ? next->find(val):NULL;
             return found_node;
         }
         node* merge(node* node2){
+            if( node2 == NULL ) 
+                throw invalid_argument("NULL node received");
             if( size != node2->size )
                 throw invalid_argument("cannot merge!!") ;
             
@@ -50,10 +48,12 @@ struct binomial_heap{
 
         void print(){
             queue<node*> qq,qq2;
-            qq.push(this);
-           // cout<<this->value<<endl;
+            int level = 0;
+            cout<<"Level "<<level<<": "<<this->value<<endl;
+            if( this->child != NULL ) qq.push(this->child);
             while( !qq.empty() ){
-                qq2 = queue<node*> ();    
+                qq2 = queue<node*> (); 
+                cout<<"Level "<<++level<<": ";   
                 while( !qq.empty() ){
                     node* head = qq.front() ;
                     while( head != NULL ){
@@ -65,7 +65,6 @@ struct binomial_heap{
                 }
                 cout<<endl;
                 qq = qq2;
-                
             } 
         }
     };
@@ -76,7 +75,7 @@ struct binomial_heap{
     ~binomial_heap(){
         delete head;
     }
-    void print(){
+    void print2(){
         int sz = size();
         cout<<"Heap size: "<<sz<<endl;
         string s;
@@ -86,7 +85,23 @@ struct binomial_heap{
         }
         std::reverse(s.begin(),s.end());
         cout<<s<<endl;
-        head->print();
+        if( head != NULL ) head->print();
+    }
+
+    void print(){
+        int sz = size();
+        node *h = head;
+        int i=0;
+        while( sz ){
+            if( sz&1 ){
+                cout<<"Binomial Tree: B"<<i<<endl;
+                h->print();
+                h = h->next;
+            }
+
+            i++;
+            sz >>= 1;
+        }
     }
     int size(node* head){
         int sz=0;
@@ -107,26 +122,23 @@ struct binomial_heap{
     }
     node* reverse_list(node *h){
         if( h == NULL ) return h;
-
         node* new_head = h;
         while( new_head->next != NULL)
             new_head = new_head->next;
         
         reverse(h);
-        // h->next = NULL;
         return new_head;
     }
-    node* merge(node *node1, node *node2 ){
+    node* merge(node *node1, node *node2){
         int size1=size(node1),size2=size(node2);
-
+   
         node *carry = NULL;
-        node *merge_head = NULL, *merge_tail = NULL;
+        node *merge_head = NULL;
+        node *merge_tail = NULL;
         node *next1 =NULL,*next2 = NULL;
 
         while( size1 || size2 ){
-            int b1=size1&1,b2=size2&1,b3=carry!=NULL;
-            int sum = b1+b2+b3;
-
+            int sum = (size1&1)+(size2&1)+(carry!=NULL);
             next1 = node1;
             next2 = node2;
             if( sum&1 ){
@@ -202,9 +214,15 @@ struct binomial_heap{
                 merge_tail = merge_tail->next;
             }
         }
+        if( merge_tail != NULL) merge_tail->next = NULL;
 
-
-        merge_tail->next = NULL;
+        if( merge_head != NULL ){
+            node* h = merge_head;
+            while( h!=NULL){
+                h->parent=NULL;
+                h = h->next;
+            }
+        }
         return merge_head;
     }
 
@@ -218,6 +236,9 @@ struct binomial_heap{
 
  
     node* max_node(){
+        if( size() == 0 )
+            throw underflow_error("heap is empty!!");
+        
         node* h = head;
         node* m_node = head;
         h = h->next;
@@ -230,14 +251,12 @@ struct binomial_heap{
         }
         return m_node;
     }
-    int extract_max(){
-        if( size() == 0 ){
-            throw underflow_error("heap is empty!!");
-        }
+    int find_max(){
         return max_node()->value ;
     }
     void delete_max(){
         node* m_node = max_node();
+        
         node* h = head ;
         if( m_node == head )
             head = m_node->next;
@@ -250,9 +269,69 @@ struct binomial_heap{
        
         m_node->next = NULL;
         node* ch = reverse_list(m_node->child);
-  
+     
         head = merge(head,ch);
         m_node->child = NULL;
+
         delete m_node ;
+    }
+    int extract_max(){
+        int mx = find_max();
+        delete_max();
+        return mx;
+    }
+
+    void increase_key(int val,int new_val){
+        if( size() == 0 )
+            throw underflow_error("heap is empty!!");
+
+        node* fnd= head->find(val);
+        if( fnd == NULL)            
+            throw invalid_argument("increase_key: key not found!");
+    
+        if( new_val< val )
+            throw invalid_argument("increase_key: new value must be bigger than pervious one");
+        
+        fnd->value = new_val;
+        while( fnd->parent != NULL && (fnd->parent)->value < new_val ){
+            int temp = (fnd->parent)->value ;
+            (fnd->parent)->value = fnd->value;
+            fnd->value = temp;
+            
+            fnd = fnd->parent;
+        }
+    }
+
+    void erase(int val){
+        if( size() == 0 )
+            throw underflow_error("heap is empty!!");
+
+        node *fnd = head->find(val);
+        if( fnd == NULL )
+            return ;
+        
+        while( fnd->parent != NULL ){
+            int temp = (fnd->parent)->value;
+            (fnd->parent)->value = fnd->value;
+            fnd->value = temp;
+
+            fnd = fnd->parent;
+        }
+
+        node *h = head;
+        if( head == fnd )
+            head = head->next;
+        else {
+            while( h->next != fnd ){
+                h = h->next;
+            }
+            h->next = fnd->next;
+        }
+
+        fnd->next = NULL;
+        node* ch = reverse_list(fnd->child);
+        head = merge(head,ch);
+        fnd->child = NULL;
+        delete fnd;
     }
 };

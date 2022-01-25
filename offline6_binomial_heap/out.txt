@@ -1,13 +1,34 @@
-12
-12 
-6 10 11 
-4 5 
-3 
-deleted 3
-deleted 5
-deleted 4
-deleted 9
-deleted 11
-deleted 10
-deleted 6
-deleted 12
+Inserted 7
+Inserted 12
+Inserted 19
+Inserted 5
+Inserted 16
+Inserted 6
+Printing binomial heap...
+-----------------------------------
+Binomial Tree: B1
+Level 0: 16
+Level 1: 6 
+Binomial Tree: B2
+Level 0: 19
+Level 1: 12 5 
+Level 2: 7 
+Increased 7. The updated value is 27
+Printing binomial heap...
+-----------------------------------
+Binomial Tree: B1
+Level 0: 16
+Level 1: 6 
+Binomial Tree: B2
+Level 0: 27
+Level 1: 19 5 
+Level 2: 12 
+FindMax returned 27
+ExtractMax returned 27
+ExtractMax returned 19
+Printing binomial heap...
+-----------------------------------
+Binomial Tree: B2
+Level 0: 16
+Level 1: 12 6 
+Level 2: 5 

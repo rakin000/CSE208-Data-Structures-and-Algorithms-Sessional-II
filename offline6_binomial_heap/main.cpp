@@ -4,38 +4,48 @@ using namespace std;
 
 
 int main(){
+    string cmd;
+    int val1,val2;
     binomial_heap bh;
-    bh.insert(3);
-    bh.insert(4);
-    bh.insert(5);
-    bh.insert(6);
-    bh.insert(9);
-    bh.insert(10);
-    bh.insert(11);
-    bh.insert(12);
-    bh.insert(1);
-    bh.insert(2);
-    bh.insert(13);
-    bh.insert(14);
-    bh.insert(15);
-    bh.insert(16);
-    bh.insert(17);
-    bh.insert(18);
-    bh.delete_max();
-    bh.print();
-  
-    bh.delete_max();
-    bh.print();
 
-    bh.delete_max();
-    bh.print();
+    while(cin>>cmd){
+        if( cin.eof() )
+            break;
+        if( cmd == "INS"){
+            cin>>val1;
+            bh.insert(val1);
+            cout<<"Inserted "<<val1<<endl;
+        }
+        else if( cmd == "PRI"){
+            cout<<"Printing binomial heap..."<<endl;
+            cout<<"-----------------------------------\n";
+            bh.print();
+        }
+        else if( cmd == "INC"){
+            cin>>val1>>val2;
+            try{
+                bh.increase_key(val1,val2);
+                cout<<"Increased "<<val1<<". The updated value is "<<val2<<endl;
 
-    bh.delete_max();
-    bh.print();
-
-    bh.delete_max();
-    bh.print();
-
-    bh.delete_max();
-    bh.print();
+            }
+            catch( exception &e ){
+                cerr<<e.what()<<endl;
+            }
+        }
+        else if( cmd == "FIN" ){
+            try{
+                cout<<"FindMax returned "<<bh.find_max()<<endl;
+            }catch( exception &e){
+                cerr<<e.what()<<endl;
+            }
+        }
+        else if( cmd == "EXT" ){
+            try{
+                cout<<"ExtractMax returned "<<bh.extract_max()<<endl;
+            }
+            catch( exception &e){
+                cerr<<e.what()<<endl;
+            }
+        }
+    }
 }
